@@ -103,6 +103,15 @@ module.exports = function(controller) {
 
                     var item = user.tasks.splice(number,1);
                     console.log('<><><>><<><><>',user.tasks)
+                    
+                    controller.storage.users.save(user, function(err,saved) {
+
+                        if (err) {
+                            bot.reply(message, 'I experienced an error adding your task: ' + err);
+                            return
+                        }
+        
+                    });
 
                     // reply with a strikethrough message...
                     bot.reply(message, '~' + item + '~');
