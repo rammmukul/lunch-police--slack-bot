@@ -88,7 +88,6 @@ module.exports = function (controller) {
 
   })
 
-
   controller.hears('show', 'direct_mention', function (bot, message) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
