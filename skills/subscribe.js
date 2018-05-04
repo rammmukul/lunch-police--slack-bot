@@ -19,7 +19,7 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.insertMany(channel.subscribed)
+          col.insertMany(channel.subscribed.map(user => {user: user}))
           client.close()
         })
       })
