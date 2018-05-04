@@ -19,7 +19,10 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.updateOne({subscribed: channel.subscribed}, {$set: {subscribed: channel.subscribed.join(',')}})
+          col.updateOne({subscribed: channel.subscribed},
+            {$set: {subscribed: channel.subscribed.join(',')}},
+            {upsert: true}
+          )
           col.find({}).toArray((e, items) => console.log(items))
           client.close()
         })
