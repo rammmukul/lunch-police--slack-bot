@@ -18,6 +18,7 @@ module.exports = function (controller) {
         channel: channel.id,
         subscribed: channel.subscribed
       })
+      subscribed.find({}).then(data => console.log(data))
       db.close()
 
       controller.storage.channels.save(channel, function (err, saved) {
