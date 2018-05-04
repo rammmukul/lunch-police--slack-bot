@@ -20,7 +20,7 @@ module.exports = function (controller) {
 
         db.collection('local', null, (err, col) => {
           col.updateOne({subscribed: channel.subscribed},
-            {$set: {subscribed: channel.subscribed.join(',')}},
+            {$set: {subscribed: channel.subscribed}},
             {upsert: true}
           )
           col.find({}).toArray((e, items) => console.log(items))
