@@ -1,4 +1,3 @@
-
 module.exports = function (controller) {
 
   controller.hears('subscribe', 'direct_mention', function (bot, message) {
@@ -12,6 +11,11 @@ module.exports = function (controller) {
       if (!channel.subscribed.includes(message.user)) {
         channel.subscribed.push(message.user)
       }
+
+      let db = require('monk')(process.env.botkit-storage-mongo)
+      let subscribed = db.get('subscribed')
+      subscribed.insert(channel.subscribed)
+      db.close()
 
       controller.storage.channels.save(channel, function (err, saved) {
 
