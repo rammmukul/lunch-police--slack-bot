@@ -13,7 +13,7 @@ module.exports = function (controller) {
 
       channel.subscribed.push(message.user)
 
-      controller.storage.channels.save(message.channel, function (err, saved) {
+      controller.storage.channels.save(channel, function (err, saved) {
 
         if (err) {
           bot.reply(message, 'I experienced an error adding you :' + err);
