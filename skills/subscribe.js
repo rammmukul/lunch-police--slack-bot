@@ -12,7 +12,7 @@ module.exports = function (controller) {
         channel.subscribed.push(message.user)
       }
 
-      let db = require('monk')(process.env.botkit-storage-mongo)
+      let db = require('monk')(process.env.MONGO_URI)
       let subscribed = db.get('subscribed')
       subscribed.insert(channel.subscribed)
       db.close()
