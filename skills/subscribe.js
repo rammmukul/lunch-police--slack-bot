@@ -45,7 +45,7 @@ module.exports = function (controller) {
   })
 
 
-  controller.hears('unsubscribe', 'direct_mention', function (bot, message) {
+  controller.hears('remove', 'direct_mention', function (bot, message) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
       if (!channel || !channel.subscribed) {
