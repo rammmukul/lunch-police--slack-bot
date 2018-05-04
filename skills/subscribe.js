@@ -3,12 +3,12 @@ const url = process.env.MONGO_URI
 
 MongoClient.connect(url, function(err, client) {
   // Use the admin database for the operation
-  const adminDb = client.db('test').admin();
+  const adminDb = client.db('test')
 
   // List all the available databases
-  adminDb.listDatabases(function(err, dbs) {
+  adminDb.collection('test',null,function(err, dbs) {
     console.log(dbs)
-    client.close();
+    client.close()
   })
 })
 
