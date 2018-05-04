@@ -1,3 +1,6 @@
+const MongoClient = require('mongodb').MongoClient
+const url = process.env.MONGO_URI
+
 module.exports = function (controller) {
 
   controller.hears('subscribe', 'direct_mention', function (bot, message) {
@@ -11,6 +14,16 @@ module.exports = function (controller) {
       if (!channel.subscribed.includes(message.user)) {
         channel.subscribed.push(message.user)
       }
+
+      MongoClient.connect(url, (err, client) => {
+        const db = client.db('test')
+
+        db.collection('local', null, (err, col) => {
+          col.insertOne({subscribed: channel.subscribed})
+          client.close()
+        })
+      })
+
 
       controller.storage.channels.save(channel, function (err, saved) {
 
