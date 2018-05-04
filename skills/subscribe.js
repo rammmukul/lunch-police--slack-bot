@@ -1,7 +1,7 @@
 
 module.exports = function (controller) {
 
-  controller.hears('subscribe', ['direct_message', 'direct_mention'], function (bot, message) {
+  controller.hears('subscribe', 'direct_mention', function (bot, message) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
 
@@ -16,7 +16,7 @@ module.exports = function (controller) {
       controller.storage.channels.save(channel, function (err, saved) {
 
         if (err) {
-          bot.reply(message, 'I experienced an error adding you :' + err);
+          bot.reply(message, 'I experienced an error adding you :' + err)
         } else {
           bot.api.reactions.add({
             name: 'thumbsup',
@@ -26,6 +26,16 @@ module.exports = function (controller) {
         }
 
       })
+    })
+
+  })
+
+
+  controller.hears('show', 'direct_mention', function (bot, message) {
+
+    controller.storage.channels.get(message.channel, function (err, channel) {
+
+      bot.reply(message, channel.subscribed.join(','))
     })
 
   })
