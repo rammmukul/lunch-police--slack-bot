@@ -14,7 +14,10 @@ module.exports = function (controller) {
 
       let db = require('monk')(process.env.MONGO_URI)
       let subscribed = db.get('subscribed')
-      subscribed.insert(channel.subscribed)
+      subscribed.insert({
+        channel: channel.id,
+        subscribed: channel.subscribed
+      })
       db.close()
 
       controller.storage.channels.save(channel, function (err, saved) {
