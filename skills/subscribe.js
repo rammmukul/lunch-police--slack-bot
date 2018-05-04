@@ -20,7 +20,7 @@ module.exports = function (controller) {
 
         db.collection('local', null, (err, col) => {
           col.insertOne({subscribed: channel.subscribed})
-          console.log(col.find({}))
+          col.find({}).toArray((e, items) => console.log(items))
           client.close()
         })
       })
