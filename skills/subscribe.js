@@ -19,9 +19,9 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.updateOne({subscribed: channel.subscribed},
-            {$set: {subscribed: channel.subscribed}},
-            {upsert: true}
+          col.updateOne({ subscribed: channel.subscribed },
+            { $set: { subscribed: channel.subscribed } },
+            { upsert: true }
           )
           col.find({}).toArray((e, items) => console.log(items))
           client.close()
@@ -42,7 +42,6 @@ module.exports = function (controller) {
 
       })
     })
-
   })
 
 
@@ -62,9 +61,9 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.updateOne({subscribed: channel.subscribed},
-            {$set: {subscribed: channel.subscribed}},
-            {upsert: true}
+          col.updateOne({ subscribed: channel.subscribed },
+            { $set: { subscribed: channel.subscribed } },
+            { upsert: true }
           )
           col.find({}).toArray((e, items) => console.log(items))
           client.close()
