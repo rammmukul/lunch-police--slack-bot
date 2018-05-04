@@ -28,6 +28,31 @@ module.exports = function (controller) {
         })
       })
 
+      controller.hears('unsubscribe', 'direct_mention', function (bot, message) {
+
+        controller.storage.channels.get(message.channel, function (err, channel) {
+          if (!channel || !channel.subscribed) {
+            channel = {}
+            channel.id = message.channel
+            channel.subscribed = []
+          }
+          if (channel.subscribed.includes(message.user)) {
+            channel.subscribed.splice(channel.subscribed.indexOf(message.user),1)
+          }
+    
+          MongoClient.connect(url, (err, client) => {
+            const db = client.db('test')
+    
+            db.collection('local', null, (err, col) => {
+              col.updateOne({subscribed: channel.subscribed},
+                {$set: {subscribed: channel.subscribed}},
+                {upsert: true}
+              )
+              col.find({}).toArray((e, items) => console.log(items))
+              client.close()
+            })
+          })
+    
 
       controller.storage.channels.save(channel, function (err, saved) {
 
