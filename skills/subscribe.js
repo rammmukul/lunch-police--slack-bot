@@ -19,7 +19,7 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.insertOne({subscribed: channel.subscribed})
+          col.updateOne({subscribed: channel.subscribed})
           col.find({}).toArray((e, items) => console.log(items))
           client.close()
         })
