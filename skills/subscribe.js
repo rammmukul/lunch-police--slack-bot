@@ -6,7 +6,7 @@ MongoClient.connect(url, function(err, client) {
   const adminDb = client.db('test')
 
   // List all the available databases
-  adminDb.collection('test',null,function(err, dbs) {
+  adminDb.collection('local',null,function(err, dbs) {
     console.log(dbs)
     client.close()
   })
