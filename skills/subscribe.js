@@ -3,7 +3,7 @@ module.exports = function (controller) {
 
   controller.hears('subscribe', ['direct_message', 'direct_mention'], function (bot, message) {
 
-    controller.storage.channels.get(message.channel, function (err, user) {
+    controller.storage.channels.get(message.channel, function (err, channel) {
 
       if (!channel.subscribed) {
         channel.subscribed = []
