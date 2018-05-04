@@ -1,17 +1,6 @@
 const MongoClient = require('mongodb').MongoClient
 const url = process.env.MONGO_URI
 
-MongoClient.connect(url, function(err, client) {
-  // Use the admin database for the operation
-  const adminDb = client.db('test')
-
-  // List all the available databases
-  adminDb.collection('local',null,function(err, dbs) {
-    console.log(JSON.stringify(dbs,null,2))
-    client.close()
-  })
-})
-
 module.exports = function (controller) {
 
   controller.hears('subscribe', 'direct_mention', function (bot, message) {
@@ -25,6 +14,16 @@ module.exports = function (controller) {
       if (!channel.subscribed.includes(message.user)) {
         channel.subscribed.push(message.user)
       }
+
+      MongoClient.connect(url, (err, client) => {
+        const db = client.db('test')
+
+        db.collection('local', null, (err, col) => {
+          col.insertMany(channel.subscribed)
+          client.close()
+        })
+      })
+
 
       controller.storage.channels.save(channel, function (err, saved) {
 
@@ -48,7 +47,7 @@ module.exports = function (controller) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
 
-      bot.reply(message, channel.subscribed.map(user => '<@'+user+'>').join(','))
+      bot.reply(message, channel.subscribed.map(user => '<@' + user + '>').join(','))
     })
 
   })
