@@ -7,8 +7,7 @@ MongoClient.connect(url, function(err, client) {
 
   // List all the available databases
   adminDb.listDatabases(function(err, dbs) {
-    test.equal(null, err);
-    test.ok(dbs.databases.length > 0);
+    console.log(dbs)
     client.close();
   })
 })
