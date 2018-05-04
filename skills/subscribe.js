@@ -54,7 +54,7 @@ module.exports = function (controller) {
         channel.subscribed = []
       }
       if (channel.subscribed.includes(message.user)) {
-        channel.subscribed.splice(channel.indexOf(message.user), 1)
+        channel.subscribed.splice(channel.subscribed.indexOf(message.user), 1)
       }
 
       MongoClient.connect(url, (err, client) => {
