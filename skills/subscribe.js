@@ -4,7 +4,7 @@ module.exports = function (controller) {
   controller.hears('subscribe', 'direct_mention', function (bot, message) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
-      console.log('<><><><>', channel)
+      console.log('<><><><>', channel, message)
       if (!channel || !channel.subscribed) {
         channel = {}
         channel.id = message.channel
