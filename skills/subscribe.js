@@ -5,7 +5,9 @@ module.exports = function (controller) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
 
-      if (!channel.subscribed) {
+      if (!channel) {
+        channel = {}
+        channel.id = message.channel
         channel.subscribed = []
       }
 
