@@ -19,8 +19,8 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.updateOne({ subscribed: channel.subscribed },
-            { $set: { subscribed: channel.subscribed } },
+          col.updateOne({ id: channel.id },
+            { $set: { id:channel.id, subscribed: channel.subscribed } },
             { upsert: true }
           )
           col.find({}).toArray((e, items) => console.log(items))
@@ -61,8 +61,8 @@ module.exports = function (controller) {
         const db = client.db('test')
 
         db.collection('local', null, (err, col) => {
-          col.updateOne({ subscribed: channel.subscribed },
-            { $set: { subscribed: channel.subscribed } },
+          col.updateOne({ id: channel.id },
+            { $set: { id: channel.id, subscribed: channel.subscribed } },
             { upsert: true }
           )
           col.find({}).toArray((e, items) => console.log(items))
@@ -88,9 +88,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('show', 'direct_mention', function (bot, message) {
-
     controller.storage.channels.get(message.channel, function (err, channel) {
-
       bot.reply(message, channel.subscribed.map(user => '<@' + user + '>').join(','))
     })
 
