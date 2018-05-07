@@ -21,7 +21,7 @@ module.exports = function (controller) {
         db.collection('local', null, (err, col) => {
           col.updateOne({ id: channel.id },
             { $set: { id:channel.id, subscribed: channel.subscribed } },
-            { upsert: true }
+            { upsert: false }
           )
           col.find({}).toArray((e, items) => console.log(items))
           client.close()
