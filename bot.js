@@ -105,4 +105,4 @@ if (!process.env.clientId || !process.env.clientSecret) {
     console.log('To enable, pass in a studio_token parameter with a token from https://studio.botkit.ai/')
   }
 }
-debug('main file', JSON.stringify(this, null, 4))
+console.log('main file', JSON.stringify(this, null, 4))
