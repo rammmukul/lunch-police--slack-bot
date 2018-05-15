@@ -10,11 +10,12 @@ module.exports = function (controller) {
       const db = client.db('test')
       let col = await db.collection('lunch')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
-
+      console.log('<>>>', subscribed)
       subscribed = subscribed ? subscribed.subscribed : []
       if (!subscribed.includes(message.user)) {
         subscribed.push(message.user)
       }
+      console.log('<<>>>>', subscribed)
       col.updateOne({ _id: 'lunch' },
         { $set: { _id: 'lunch', subscribed: subscribed } },
         { upsert: true }
