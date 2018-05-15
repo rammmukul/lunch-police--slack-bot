@@ -80,7 +80,7 @@ module.exports = function (controller) {
 
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
-    console.log('<<<<', message.text, JSON.stringify(regx.match(message.text), null, 2))
+    console.log('<<<<', message.text, JSON.stringify(message.text.match(regx), null, 2))
     let add = message.text.match(regx).map(user => user.slice(2, -1))
     try {
       let client = await MongoClient.connect(url)
