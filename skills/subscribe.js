@@ -74,7 +74,8 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
       let col = await db.collection('a')
-      let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
+      let subscribed = await col.find({}).toArray()[0]
+      console.log('<>--<<>>>>', subscribed)
       if (!subscribed) {
         col.insertOne({ _id: 'lunch', subscribed: [] },{ upsert: true })
       }
