@@ -105,12 +105,3 @@ if (!process.env.clientId || !process.env.clientSecret) {
     console.log('To enable, pass in a studio_token parameter with a token from https://studio.botkit.ai/')
   }
 }
-
-let bot = controller.spawn(bot_options)
-
-bot.say(
-  {
-    text: 'I am alive',
-    channel: 'GAEVB0QL9'
-  }
-);
