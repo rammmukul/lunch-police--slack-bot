@@ -3,7 +3,7 @@ const url = process.env.MONGO_URI
 
 module.exports = function (controller) {
 
-  controller.hears('^\s*subscribe\s+lunch', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*subscribe lunch', 'direct_mention', async function (bot, message) {
 
     controller.storage.channels.get(message.channel, async function (err, channel) {
       if (!channel || !channel.subscribed) {
