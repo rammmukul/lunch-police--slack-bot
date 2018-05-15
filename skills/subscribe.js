@@ -34,7 +34,7 @@ module.exports = function (controller) {
   })
 
 
-  controller.hears('^\s*unsubscribe\s+lunch', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*unsubscribe lunch', 'direct_mention', async function (bot, message) {
 
     try {
       let client = await MongoClient.connect(url)
@@ -63,7 +63,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*show\s+lunch', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*show lunch', 'direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
@@ -80,7 +80,7 @@ module.exports = function (controller) {
 
 
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
-    let regx = /<@((?:\d|\w)*)>/g
+    let regx = /<@(?:\d|\w)*>/g
     console.log('<<<<', message.text, JSON.stringify(regx.exec(message.text), null, 2))
     let add = message.text.match(regx).map(user => user.slice(2, -1))
     try {
