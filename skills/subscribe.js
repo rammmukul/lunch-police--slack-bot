@@ -8,7 +8,7 @@ module.exports = function (controller) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
-      let col = await db.collection('lunch')
+      let col = await db.collection('a')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
       console.log('<>>>', subscribed)
       if (!subscribed) {
@@ -43,7 +43,7 @@ module.exports = function (controller) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
-      let col = await db.collection('lunch')
+      let col = await db.collection('a')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
       if (!subscribed) {
         col.insertOne({ _id: 'lunch', subscribed: [] },{ upsert: true })
@@ -73,7 +73,7 @@ module.exports = function (controller) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
-      let col = await db.collection('lunch')
+      let col = await db.collection('a')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
       if (!subscribed) {
         col.insertOne({ _id: 'lunch', subscribed: [] },{ upsert: true })
@@ -86,7 +86,6 @@ module.exports = function (controller) {
     }
   })
 
-
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
     console.log('<<<<', message.text, JSON.stringify(regx.match(message.text), null, 2))
@@ -94,7 +93,7 @@ module.exports = function (controller) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
-      let col = await db.collection('lunch')
+      let col = await db.collection('a')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
       if (!subscribed) {
         col.insertOne({ _id: 'lunch', subscribed: [] },{ upsert: true })
