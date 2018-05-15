@@ -77,7 +77,6 @@ module.exports = function (controller) {
     }
   })
 
-
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
     console.log('<<<<', message.text, JSON.stringify(message.text.match(regx), null, 2))
@@ -108,6 +107,39 @@ module.exports = function (controller) {
 
     } catch (err) {
       bot.reply(message, 'I experienced an error adding :' + err)
+    }
+  })
+
+  controller.hears('remove from lunch <@.*>', 'direct_mention', async function (bot, message) {
+    let regx = /<@(?:\d|\w)*>/g
+    console.log('<<<<', message.text, JSON.stringify(message.text.match(regx), null, 2))
+    let remove = message.text.match(regx).map(user => user.slice(2, -1))
+    try {
+      let client = await MongoClient.connect(url)
+      const db = client.db('test')
+      let col = await db.collection('lunch')
+      let subscribed = (await col.find({ _id: 'lunch' }).toArray())[0]
+
+      subscribed = subscribed ? subscribed.subscribed : []
+      remove.forEach(user => {
+        if (subscribed.includes(user)) {
+          subscribed.splice(subscribed.indexOf(user), 1)
+        }        
+      })
+      col.updateOne({ _id: 'lunch' },
+        { $set: { _id: 'lunch', subscribed: subscribed } },
+        { upsert: true }
+      )
+      client.close()
+
+      bot.api.reactions.add({
+        name: 'thumbsup',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
+    } catch (err) {
+      bot.reply(message, 'I experienced an error removing :' + err)
     }
   })
 }
