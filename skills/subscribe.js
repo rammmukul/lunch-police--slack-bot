@@ -18,7 +18,8 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
 
-      let col = await db.collection('local')
+      let col = await db.collection('lunch')
+      console.log(await col.find())
       col.updateOne({ _id: channel.id },
         { $set: { _id: channel.id, subscribed: channel.subscribed } },
         { upsert: true }
@@ -58,7 +59,7 @@ module.exports = function (controller) {
       MongoClient.connect(url, (err, client) => {
         const db = client.db('test')
 
-        db.collection('local', null, (err, col) => {
+        db.collection('lunch', null, (err, col) => {
           col.updateOne({ _id: channel.id },
             { $set: { _id: channel.id, subscribed: channel.subscribed } },
             { upsert: true }
