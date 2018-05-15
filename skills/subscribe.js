@@ -77,4 +77,10 @@ module.exports = function (controller) {
       bot.reply(message, 'I experienced an error showing subscriptions :' + err)
     }
   })
+
+
+  controller.hears('.*', 'direct_mention', async function (bot, message) {
+    console.log('<<<<', JSON.stringify(message, null, 2))
+    bot.reply(message, 'Hmm...')
+  })
 }
