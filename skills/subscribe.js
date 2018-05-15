@@ -71,7 +71,7 @@ module.exports = function (controller) {
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
 
       subscribed = subscribed ? subscribed.subscribed : []
-      bot.reply(message, subscribed.map(user => '<@' + user + '>').join(','))
+      bot.reply(message, 'lunch : '+subscribed.map(user => '<@' + user + '>').join(','))
       client.close()
     } catch (err) {
       bot.reply(message, 'I experienced an error showing subscriptions :' + err)
@@ -81,7 +81,7 @@ module.exports = function (controller) {
 
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
-    console.log('<<<<', message.text, JSON.stringify(regx.exec(message.text), null, 2))
+    console.log('<<<<', message.text, JSON.stringify(regx.match(message.text), null, 2))
     let add = message.text.match(regx).map(user => user.slice(2, -1))
     try {
       let client = await MongoClient.connect(url)
