@@ -81,7 +81,7 @@ module.exports = function (controller) {
 
   controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let reg = /<@((?:\d|\w)*)>/g
-    console.log('<<<<', JSON.stringify(reg.exec(message.text), null, 2))
+    console.log('<<<<', message.text, JSON.stringify(reg.exec(message.text), null, 2))
     bot.reply(message, 'Hmm...')
   })
 }
