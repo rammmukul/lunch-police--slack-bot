@@ -9,10 +9,8 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
       let col = await db.collection('lunch')
-      let subscribed = await col.find({ _id: 'lunch' }).toArray()[0].subscribed
-      if (!(subscribed instanceof Array)) {
-        subscribed = []
-      }
+      let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
+      subscribed = subscribed ? subscribed.subscribed : []
       if (!subscribed.includes(message.user)) {
         subscribed.push(message.user)
       }
