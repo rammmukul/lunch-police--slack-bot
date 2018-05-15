@@ -11,6 +11,9 @@ module.exports = function (controller) {
       let col = await db.collection('lunch')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
       console.log('<>>>', subscribed)
+      if (!subscribed) {
+        col.insertOne({ _id: 'lunch', subscribed: [] })
+      }
       subscribed = subscribed ? subscribed.subscribed : []
       if (!subscribed.includes(message.user)) {
         subscribed.push(message.user)
@@ -42,7 +45,9 @@ module.exports = function (controller) {
       const db = client.db('test')
       let col = await db.collection('lunch')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
-
+      if (!subscribed) {
+        col.insertOne({ _id: 'lunch', subscribed: [] })
+      }
       subscribed = subscribed ? subscribed.subscribed : []
       if (subscribed.includes(message.user)) {
         subscribed.splice(subscribed.indexOf(message.user), 1)
@@ -70,7 +75,9 @@ module.exports = function (controller) {
       const db = client.db('test')
       let col = await db.collection('lunch')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
-
+      if (!subscribed) {
+        col.insertOne({ _id: 'lunch', subscribed: [] })
+      }
       subscribed = subscribed ? subscribed.subscribed : []
       bot.reply(message, 'lunch : '+subscribed.map(user => '<@' + user + '>').join(','))
       client.close()
@@ -89,7 +96,9 @@ module.exports = function (controller) {
       const db = client.db('test')
       let col = await db.collection('lunch')
       let subscribed = await col.find({ _id: 'lunch' }).toArray()[0]
-
+      if (!subscribed) {
+        col.insertOne({ _id: 'lunch', subscribed: [] })
+      }
       subscribed = subscribed ? subscribed.subscribed : []
       add.forEach(user => {
         if (!subscribed.includes(user)) {
