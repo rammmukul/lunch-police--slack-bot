@@ -5,42 +5,35 @@ module.exports = function (controller) {
 
   controller.hears('^\s*subscribe lunch', 'direct_mention', async function (bot, message) {
 
-    controller.storage.channels.get(message.channel, async function (err, channel) {
-      if (!channel || !channel.subscribed) {
-        channel = {}
-        channel.id = message.channel
-        channel.subscribed = []
-      }
-      if (!channel.subscribed.includes(message.user)) {
-        channel.subscribed.push(message.user)
-      }
-
+    try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
-
       let col = await db.collection('lunch')
-      console.log('<><><><>',await col.find({_id: channel.id}).toArray(), '<><><><>')
-      col.updateOne({ _id: channel.id },
-        { $set: { _id: channel.id, subscribed: channel.subscribed } },
+      let subscribed = await col.find({ _id: 'lunch' }).toArray()[0].subscribed
+      if (!(subscribed instanceof Array)) {
+        subscribed = []
+      }
+      if (!subscribed.includes(message.user)) {
+        subscribed.push(message.user)
+      }
+      console.log('<><><><>', subscribed, '<><><><>')
+      col.updateOne({ _id: 'lunch' },
+        { $set: { _id: 'lunch', subscribed: subscribed } },
         { upsert: true }
       )
-      col.find({}).toArray((e, items) => console.log(items))
+      col.find({}).toArray((e, items) => console.log('>>>>',items))
       client.close()
 
-      controller.storage.channels.save(channel, function (err, saved) {
-
-        if (err) {
-          bot.reply(message, 'I experienced an error adding you :' + err)
-        } else {
-          bot.api.reactions.add({
-            name: 'thumbsup',
-            channel: message.channel,
-            timestamp: message.ts
-          })
-        }
-
+      bot.api.reactions.add({
+        name: 'thumbsup',
+        channel: message.channel,
+        timestamp: message.ts
       })
-    })
+
+    } catch (err) {
+      bot.reply(message, 'I experienced an error adding you :' + err)
+    }
+
   })
 
 
