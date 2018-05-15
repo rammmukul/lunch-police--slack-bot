@@ -19,7 +19,7 @@ module.exports = function (controller) {
       const db = client.db('test')
 
       let col = await db.collection('lunch')
-      console.log('<><><><>',await col.find({_id: channel.id}), '<><><><>')
+      console.log('<><><><>',await col.find({_id: channel.id}).toArray(), '<><><><>')
       col.updateOne({ _id: channel.id },
         { $set: { _id: channel.id, subscribed: channel.subscribed } },
         { upsert: true }
