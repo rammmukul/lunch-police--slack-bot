@@ -77,7 +77,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('add to lunch <@.*>', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*add to lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
     let add = message.text.match(regx).map(user => user.slice(2, -1))
     try {
@@ -109,7 +109,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('remove from lunch <@.*>', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*remove from lunch <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
     let remove = message.text.match(regx).map(user => user.slice(2, -1))
     try {
