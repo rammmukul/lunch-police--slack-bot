@@ -3,7 +3,7 @@ const url = process.env.MONGO_URI
 
 module.exports = function (controller) {
 
-  controller.hears('^\s*subscribe', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*subscribe\s+lunch', 'direct_mention', async function (bot, message) {
 
     controller.storage.channels.get(message.channel, async function (err, channel) {
       if (!channel || !channel.subscribed) {
@@ -43,7 +43,7 @@ module.exports = function (controller) {
   })
 
 
-  controller.hears('^\s*unsubscribe', 'direct_mention', function (bot, message) {
+  controller.hears('^\s*unsubscribe\s+lunch', 'direct_mention', function (bot, message) {
 
     controller.storage.channels.get(message.channel, function (err, channel) {
       if (!channel || !channel.subscribed) {
@@ -85,7 +85,7 @@ module.exports = function (controller) {
 
   })
 
-  controller.hears('show', 'direct_mention', function (bot, message) {
+  controller.hears('^\s*show\s+lunch', 'direct_mention', function (bot, message) {
     controller.storage.channels.get(message.channel, function (err, channel) {
       bot.reply(message, channel.subscribed.map(user => '<@' + user + '>').join(','))
     })
