@@ -70,7 +70,7 @@ module.exports = function (controller) {
         let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
         if (message.channel !== monitor) return
 
-        let presence = (await col.find({}).toArray())[0]
+        let presence = (await col.find({}).toArray())
         client.close()
 
         bot.reply(message, "presence" + JSON.stringify(presence, null, 2))
