@@ -14,8 +14,8 @@ module.exports = function (controller) {
         let client = await MongoClient.connect(url)
         const db = client.db('test')
         let col = await db.collection('presence')
-        let moniter = (await col.find({ _id: 'group' }).toArray())[0].moniter
-        if (message.channel !== moniter) return
+        let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
+        if (message.channel !== monitor) return
 
         let presence = (await col.find({ _id: today }).toArray())[0]
         presence = presence ? presence.presence : []
@@ -39,14 +39,14 @@ module.exports = function (controller) {
       }
   })
 
-  controller.hears('^\s*moniter presence', 'direct_mention', async function(bot, message) {
+  controller.hears('^\s*monitor presence', 'direct_mention', async function(bot, message) {
     try {
         let client = await MongoClient.connect(url)
         const db = client.db('test')
         let col = await db.collection('presence')
         
         col.updateOne({ _id: 'group' },
-          { $set: { _id: 'group', moniter: message.channel } },
+          { $set: { _id: 'group', monitor: message.channel } },
           { upsert: true }
         )
         client.close()
@@ -67,13 +67,13 @@ module.exports = function (controller) {
         let client = await MongoClient.connect(url)
         const db = client.db('test')
         let col = await db.collection('presence')
-        let moniter = (await col.find({ _id: 'group' }).toArray())[0].moniter
-        if (message.channel !== moniter) return
+        let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
+        if (message.channel !== monitor) return
 
         let presence = (await col.find({}).toArray())[0]
         client.close()
 
-        bot.reply(message, presence)
+        bot.reply(message, "presence" + presence)
       } catch (err) {
         console.log(err)
       }
