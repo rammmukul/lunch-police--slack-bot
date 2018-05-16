@@ -8,7 +8,74 @@ module.exports = function (controller) {
     console.log(':::::::: ' + JSON.stringify(message, null, 2))
 
     let moment = require('moment')
-    console.log(moment().startOf('day').format('YYYY MM DD'))
+    let today = moment().startOf('day').format('DD MM YYYY')
+
+    try {
+        let client = await MongoClient.connect(url)
+        const db = client.db('test')
+        let col = await db.collection('presence')
+        let moniter = (await col.find({ _id: 'group' }).toArray())[0].moniter
+        if (message.channel !== moniter) return
+
+        let presence = (await col.find({ _id: today }).toArray())[0]
+        presence = presence ? presence.presence : []
+        if (!presence.includes(message.user)) {
+          presence.push(message.user)
+        }
+        col.updateOne({ _id: today },
+          { $set: { _id: today, presence: presence } },
+          { upsert: true }
+        )
+        client.close()
+  
+        bot.api.reactions.add({
+          name: 'heavy_check_mark',
+          channel: message.channel,
+          timestamp: message.ts
+        })
+  
+      } catch (err) {
+        console.log(err)
+      }
   })
 
+  controller.hears('^\s*moniter presence', 'direct_mention', async function(bot, message) {
+    try {
+        let client = await MongoClient.connect(url)
+        const db = client.db('test')
+        let col = await db.collection('presence')
+        
+        col.updateOne({ _id: 'group' },
+          { $set: { _id: 'group', moniter: message.channel } },
+          { upsert: true }
+        )
+        client.close()
+  
+        bot.api.reactions.add({
+          name: 'thumbsup',
+          channel: message.channel,
+          timestamp: message.ts
+        })
+  
+      } catch (err) {
+        bot.reply(message, 'I experienced an error saving configuration :' + err)
+      }
+  })
+
+  controller.hears('^\s*show presence', 'direct_mention', async function (bot, message) {
+    try {
+        let client = await MongoClient.connect(url)
+        const db = client.db('test')
+        let col = await db.collection('presence')
+        let moniter = (await col.find({ _id: 'group' }).toArray())[0].moniter
+        if (message.channel !== moniter) return
+
+        let presence = (await col.find({}).toArray())[0]
+        client.close()
+
+        bot.reply(message, presence)
+      } catch (err) {
+        console.log(err)
+      }
+  })
 }
