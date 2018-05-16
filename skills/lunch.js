@@ -152,12 +152,31 @@ module.exports = function (controller) {
       let lunch = await db.collection('lunch')
 
       let subscribed = (await lunch.find({ _id: 'lunch' }).toArray())[0]
-      let present = (await presence.find({_id: today}).toArray())[0].presence
+      let scheduled = (await lunch.find({_id: 'scheduled'}).toArray())[0]
+      let presence = (await presence.find({_id: today}).toArray())[0]
       subscribed = subscribed ? subscribed.subscribed : []
-      present = present ? present : []
+      scheduled = scheduled ? scheduled.scheduled : []
+      let present = presence.presence ? presence.presence : []
+      let lunchDuty
+      if (presence.lunchDuty) {
+        lunchDuty = presence.lunchDuty
+      } else {
+        lunchDuty = scheduled.filter(user => subscribed.includes(user) && present.includes(user))[0]
+        if (!lunchDuty) {
+          scheduled = [...scheduled, ...subscribed]
+          lunchDuty = scheduled.filter(user => subscribed.includes(user) && present.includes(user))[0]
+        }
+        scheduled.splice(scheduled.indexOf(lunchDuty), 1)
+        lunch.updateOne({ _id: 'scheduled' },
+          { $set: { _id: 'scheduled', scheduled: scheduled } },
+          { upsert: true }
+        )
+      }
       client.close()
 
-      bot.reply(message, "presence:" + JSON.stringify(subscribed) +'\n\n\n'+ JSON.stringify(present) )
+      bot.reply(message, 'presence:' + JSON.stringify(present) 
+        + '\n\n\nsubscribed:'+ JSON.stringify(subscribed) 
+        +'\n\n\nscheduled:'+ JSON.stringify(scheduled) )
     } catch (err) {
       console.log(err)
     }
