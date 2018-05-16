@@ -73,7 +73,7 @@ module.exports = function (controller) {
         let presence = (await col.find({}).toArray())[0]
         client.close()
 
-        bot.reply(message, "presence" + presence)
+        bot.reply(message, "presence" + JSON.stringify(presence, null, 2))
       } catch (err) {
         console.log(err)
       }
