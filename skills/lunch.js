@@ -168,7 +168,11 @@ module.exports = function (controller) {
         }
         scheduled.splice(scheduled.indexOf(lunchDuty), 1)
         lunch.updateOne({ _id: 'scheduled' },
-          { $set: { _id: 'scheduled', scheduled: scheduled } },
+          { $set: { _id: 'scheduled', lunchDuty: lunchDuty } },
+          { upsert: true }
+        )
+        presence.updateOne({ _id: today },
+          { $set: { _id: today, scheduled: scheduled } },
           { upsert: true }
         )
       }
