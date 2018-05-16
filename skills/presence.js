@@ -8,7 +8,7 @@ module.exports = function (controller) {
     console.log(':::::::: ' + JSON.stringify(message, null, 2))
 
     let moment = require('moment')
-    console.log(moment.startOf('day').format('YYYY MM DD'))
+    console.log(moment().startOf('day').format('YYYY MM DD'))
   })
 
 }
