@@ -153,13 +153,13 @@ module.exports = function (controller) {
 
       let subscribed = (await lunch.find({ _id: 'lunch' }).toArray())[0]
       let scheduled = (await lunch.find({_id: 'scheduled'}).toArray())[0]
-      let presence = (await presence.find({_id: today}).toArray())[0]
+      let present = (await presence.find({_id: today}).toArray())[0]
       subscribed = subscribed ? subscribed.subscribed : []
       scheduled = scheduled ? scheduled.scheduled : []
-      let present = presence.presence ? presence.presence : []
+      present = present.presence ? present.presence : []
       let lunchDuty
-      if (presence.lunchDuty) {
-        lunchDuty = presence.lunchDuty
+      if (present.lunchDuty) {
+        lunchDuty = present.lunchDuty
       } else {
         lunchDuty = scheduled.filter(user => subscribed.includes(user) && present.includes(user))[0]
         if (!lunchDuty) {
