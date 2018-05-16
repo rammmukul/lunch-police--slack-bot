@@ -152,7 +152,7 @@ module.exports = function (controller) {
       let lunch = await db.collection('lunch')
 
       let subscribed = (await lunch.find({ _id: 'lunch' }).toArray())[0]
-      let present = (await col.find({_id: today}).toArray())[0].presence
+      let present = (await presence.find({_id: today}).toArray())[0].presence
       subscribed = subscribed ? subscribed.subscribed : []
       present = present ? present : []
       client.close()
