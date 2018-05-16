@@ -175,8 +175,9 @@ module.exports = function (controller) {
       client.close()
 
       bot.reply(message, 'presence:' + JSON.stringify(present) 
-        + '\n\n\nsubscribed:'+ JSON.stringify(subscribed) 
-        +'\n\n\nscheduled:'+ JSON.stringify(scheduled) )
+        +'\n\n\nsubscribed:'+ JSON.stringify(subscribed) 
+        +'\n\n\nscheduled:'+ JSON.stringify(scheduled)
+        +lunchDuty)
     } catch (err) {
       console.log(err)
     }
