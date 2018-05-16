@@ -32,7 +32,6 @@ module.exports = function (controller) {
 
   })
 
-
   controller.hears('^\s*unsubscribe lunch', 'direct_mention', async function (bot, message) {
 
     try {
@@ -138,6 +137,29 @@ module.exports = function (controller) {
 
     } catch (err) {
       bot.reply(message, 'I experienced an error removing :' + err)
+    }
+  })
+
+
+  controller.hears('^\s*ask lunch', 'direct_mention', async function (bot, message) {
+    let moment = require('moment')
+    let today = moment().startOf('day').format('DD MM YYYY')
+
+    try {
+      let client = await MongoClient.connect(url)
+      const db = client.db('test')
+      let presence = await db.collection('presence')
+      let lunch = await db.collection('lunch')
+
+      let subscribed = (await lunch.find({ _id: 'lunch' }).toArray())[0]
+      let present = (await col.find({_id: today}).toArray())[0].presence
+      subscribed = subscribed ? subscribed.subscribed : []
+      present = present ? present : []
+      client.close()
+
+      bot.reply(message, "presence:" + JSON.stringify(subscribed) +'\n\n\n'+ JSON.stringify(present) )
+    } catch (err) {
+      console.log(err)
     }
   })
 }

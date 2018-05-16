@@ -4,9 +4,6 @@ const url = process.env.MONGO_URI
 module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
-    console.log('message: ' + message.user)
-    console.log(':::::::: ' + JSON.stringify(message, null, 2))
-
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
 
