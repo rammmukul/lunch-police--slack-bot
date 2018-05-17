@@ -19,7 +19,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*add', 'direct_mention', async function (bot, message) {
-    let regx = /<@(?:\w)+>/g
+    let regx = /<@\w+>/g
     let add = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     add = add.length ? add : [message.user]
     try {
@@ -52,7 +52,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*remove', 'direct_mention', async function (bot, message) {
-    let regx = /<@(?:\w)+>/g
+    let regx = /<@\w+>/g
     let remove = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     remove = remove.length ? remove : [message.user]
     try {
@@ -129,7 +129,7 @@ module.exports = function (controller) {
   controller.hears('^\s*ask <@\w+>', 'direct_mention', async function (bot, message) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
-    let regx = /<@(?:\w)+>/g
+    let regx = /<@\w+>/g
 
     try {
       let asked = message.text.match(regx)[0]
