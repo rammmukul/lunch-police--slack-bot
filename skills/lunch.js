@@ -19,7 +19,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*add', 'direct_mention', async function (bot, message) {
-    let regx = /<@(?:\d|\w)*>/g
+    let regx = /<@(?:\w)+>/g
     let add = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     add = add.length ? add : [message.user]
     try {
@@ -52,7 +52,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*remove', 'direct_mention', async function (bot, message) {
-    let regx = /<@(?:\d|\w)*>/g
+    let regx = /<@(?:\w)+>/g
     let remove = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     remove = remove.length ? remove : [message.user]
     try {
@@ -83,7 +83,6 @@ module.exports = function (controller) {
       bot.reply(message, 'I experienced an error removing :' + err)
     }
   })
-
 
   controller.hears('^\s*who', 'direct_mention', async function (bot, message) {
     let moment = require('moment')
@@ -126,4 +125,45 @@ module.exports = function (controller) {
       console.log(err)
     }
   })
+
+  controller.hears('^\s*ask <@(?:\w)+>', 'direct_mention', async function (bot, message) {
+    let moment = require('moment')
+    let today = moment().startOf('day').format('DD MM YYYY')
+    let regx = /<@(?:\w)+>/g
+
+    try {
+      let asked = message.text.match(regx)[0]
+      let client = await MongoClient.connect(url)
+      const db = client.db('test')
+      let presence = await db.collection('presence')
+      let lunch = await db.collection('lunch')
+
+      let scheduled = (await lunch.find({_id: 'scheduled'}).toArray())[0]
+      let present = (await presence.find({_id: today}).toArray())[0]
+      scheduled = scheduled ? scheduled.scheduled : []
+      let lunchDuty = present.lunchDuty
+
+      if (!lunchDuty) {
+        lunchDuty = asked
+        if (scheduled.includes(lunchDuty)) {
+          scheduled.splice(scheduled.indexOf(lunchDuty), 1)
+        }
+        lunch.updateOne({ _id: 'scheduled' },
+          { $set: { _id: 'scheduled', scheduled: scheduled } },
+          { upsert: true }
+        )
+        presence.updateOne({ _id: today },
+          { $set: { _id: today, lunchDuty: lunchDuty } },
+          { upsert: true }
+        )
+      }
+      client.close()
+
+      bot.reply(message, 'lunchDuty: <@' + lunchDuty + '>\n\n'
+      + 'scheduled:'+ scheduled.map(user => '<@' + user + '>'))
+    } catch (err) {
+      console.log(err)
+    }
+  })
+
 }
