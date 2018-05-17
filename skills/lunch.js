@@ -120,10 +120,8 @@ module.exports = function (controller) {
       }
       client.close()
 
-      bot.reply(message, 'present:' + present.map(user => '<@' + user + '>')
-        +'\n\n\nsubscribed:'+ subscribed.map(user => '<@' + user + '>')
-        +'\n\n\nscheduled:'+ scheduled.map(user => '<@' + user + '>')
-        +'\n\n\nlunchDuty: <@' + lunchDuty + '>')
+      bot.reply(message, 'lunchDuty: <@' + lunchDuty + '>\n\n'
+      + 'scheduled:'+ scheduled.map(user => '<@' + user + '>'))
     } catch (err) {
       console.log(err)
     }
