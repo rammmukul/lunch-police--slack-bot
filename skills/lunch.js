@@ -132,7 +132,7 @@ module.exports = function (controller) {
     let regx = /<@\w+>/g
 
     try {
-      let asked = message.text.match(regx)[0]
+      let asked = message.text.match(regx)[0].slice(2, -1)
       let client = await MongoClient.connect(url)
       const db = client.db('test')
       let presence = await db.collection('presence')
