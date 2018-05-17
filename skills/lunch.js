@@ -143,20 +143,21 @@ module.exports = function (controller) {
       scheduled = scheduled ? scheduled.scheduled : []
       let lunchDuty = present.lunchDuty
 
-      if (!lunchDuty) {
-        lunchDuty = asked
-        if (scheduled.includes(lunchDuty)) {
-          scheduled.splice(scheduled.indexOf(lunchDuty), 1)
-        }
-        lunch.updateOne({ _id: 'scheduled' },
-          { $set: { _id: 'scheduled', scheduled: scheduled } },
-          { upsert: true }
-        )
-        presence.updateOne({ _id: today },
-          { $set: { _id: today, lunchDuty: lunchDuty } },
-          { upsert: true }
-        )
+      if (lunchDuty) {
+        scheduled.push(lunchDuty)
       }
+      lunchDuty = asked
+      if (scheduled.includes(lunchDuty)) {
+        scheduled.splice(scheduled.indexOf(lunchDuty), 1)
+      }
+      lunch.updateOne({ _id: 'scheduled' },
+        { $set: { _id: 'scheduled', scheduled: scheduled } },
+        { upsert: true }
+      )
+      presence.updateOne({ _id: today },
+        { $set: { _id: today, lunchDuty: lunchDuty } },
+        { upsert: true }
+      )
       client.close()
 
       bot.reply(message, 'lunchDuty: <@' + lunchDuty + '>\n\n'
