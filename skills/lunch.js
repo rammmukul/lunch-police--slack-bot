@@ -78,7 +78,7 @@ module.exports = function (controller) {
 
   controller.hears('^\s*add', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
-    let add = message.text.match(regx).map(user => user.slice(2, -1))
+    let add = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     add = add.length ? add : [message.user]
     try {
       let client = await MongoClient.connect(url)
@@ -111,7 +111,7 @@ module.exports = function (controller) {
 
   controller.hears('^\s*remove <@.*>', 'direct_mention', async function (bot, message) {
     let regx = /<@(?:\d|\w)*>/g
-    let remove = message.text.match(regx).map(user => user.slice(2, -1))
+    let remove = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     remove = remove.length ? remove : [message.user]
     try {
       let client = await MongoClient.connect(url)
