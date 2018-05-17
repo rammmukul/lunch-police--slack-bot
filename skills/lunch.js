@@ -4,10 +4,9 @@ const url = process.env.MONGO_URI
 module.exports = function (controller) {
 
   controller.hears('^\s*lunch', 'direct_mention', async function (bot, message) {
-    console.log('>>>>>>>>>>>>>>>>>', JSON.stringify(message, null, 2))
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('lunch')
       let subscribed = (await col.find({ _id: 'lunch' }).toArray())[0]
 
@@ -31,7 +30,7 @@ module.exports = function (controller) {
     add = add.length ? add : [message.user]
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('lunch')
       let subscribed = (await col.find({ _id: 'lunch' }).toArray())[0]
 
@@ -70,7 +69,7 @@ module.exports = function (controller) {
     remove = remove.length ? remove : [message.user]
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('lunch')
       let subscribed = (await col.find({ _id: 'lunch' }).toArray())[0]
 
@@ -109,7 +108,7 @@ module.exports = function (controller) {
 
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let presence = await db.collection('presence')
       let lunch = await db.collection('lunch')
 
@@ -159,7 +158,7 @@ module.exports = function (controller) {
     try {
       let asked = message.text.match(regx)[0].slice(2, -1)
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let presence = await db.collection('presence')
       let lunch = await db.collection('lunch')
 

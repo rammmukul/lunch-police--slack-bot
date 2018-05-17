@@ -9,7 +9,7 @@ module.exports = function (controller) {
 
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('presence')
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
       if (message.channel !== monitor) return
@@ -45,7 +45,7 @@ module.exports = function (controller) {
   controller.hears('^\s*monitor presence', 'direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('presence')
 
       col.updateOne({ _id: 'group' },
@@ -75,7 +75,7 @@ module.exports = function (controller) {
   controller.hears('^\s*presence', 'direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
-      const db = client.db('test')
+      const db = client.db(message.team)
       let col = await db.collection('presence')
       let presence = (await col.find({}).toArray()).filter(obj => obj._id !== 'group')
       client.close()
