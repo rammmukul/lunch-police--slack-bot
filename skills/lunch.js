@@ -126,7 +126,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*ask <@\w+>', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*ask <@.*>', 'direct_mention', async function (bot, message) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
     let regx = /<@\w+>/g
