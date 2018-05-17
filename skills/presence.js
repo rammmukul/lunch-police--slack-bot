@@ -32,6 +32,12 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       console.log(err)
     }
   })
@@ -55,6 +61,13 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
+
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       bot.replyInThread(message, 'I experienced an error saving configuration :' + err)
     }
   })
@@ -72,8 +85,14 @@ module.exports = function (controller) {
             .map(user => '<@' + user + '>'))
         .join('\n')
 
-      bot.replyInThread(message, "presence:\n" + attendence)
+      bot.reply(message, "presence:\n" + attendence)
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       console.log(err)
     }
   })

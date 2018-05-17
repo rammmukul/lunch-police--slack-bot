@@ -14,6 +14,12 @@ module.exports = function (controller) {
       bot.reply(message, 'lunch : '+subscribed.map(user => '<@' + user + '>').join(','))
       client.close()
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       bot.replyInThread(message, 'I experienced an error showing subscriptions :' + err)
     }
   })
@@ -47,6 +53,12 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       bot.replyInThread(message, 'I experienced an error adding :' + err)
     }
   })
@@ -80,6 +92,12 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       bot.replyInThread(message, 'I experienced an error removing :' + err)
     }
   })
@@ -122,6 +140,12 @@ module.exports = function (controller) {
       bot.reply(message, 'lunchDuty: <@' + lunchDuty + '>\n\n'
       + 'scheduled:'+ scheduled.map(user => '<@' + user + '>'))
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       console.log(err)
     }
   })
@@ -162,6 +186,12 @@ module.exports = function (controller) {
       bot.reply(message, 'lunchDuty: <@' + asked + '>\n\n'
       + 'scheduled:'+ scheduled.map(user => '<@' + user + '>'))
     } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
       console.log(err)
     }
   })
