@@ -4,6 +4,7 @@ const url = process.env.MONGO_URI
 module.exports = function (controller) {
 
   controller.hears('^\s*lunch', 'direct_mention', async function (bot, message) {
+    console.log('>>>>>>>>>>>>>>>>>', JSON.stringify(message, null, 2))
     try {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
