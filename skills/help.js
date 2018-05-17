@@ -8,8 +8,8 @@ module.exports = function (controller) {
 "remove <user mentions>" : unsubscribe multiple users from lunch\n
 "who" : show the person having lunch duty\n
 "lunch" : show people subscribed to lunch\n
-"monitor presence" : start monitoring this channel for presence daily\n
 "presence" : show presence of users date wise\n
+"monitor presence" : start monitoring this channel for presence daily (should be done immediately after adding bot to workspace)\n
 "help" : show this message`)
 
   })
