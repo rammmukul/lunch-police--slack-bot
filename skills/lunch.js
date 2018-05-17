@@ -72,15 +72,24 @@ module.exports = function (controller) {
       const db = client.db(message.team)
       let col = await db.collection('lunch')
       let subscribed = (await col.find({ _id: 'lunch' }).toArray())[0]
-
+      let scheduled = (await col.find({_id: 'scheduled'}).toArray())[0]
       subscribed = subscribed ? subscribed.subscribed : []
+      scheduled = scheduled ? scheduled.scheduled : []
+
       remove.forEach(user => {
         if (subscribed.includes(user)) {
           subscribed.splice(subscribed.indexOf(user), 1)
-        }        
+        }
+        while(scheduled.includes(user)) {
+          scheduled.splice(scheduled.indexOf(user), 1)
+        }
       })
       col.updateOne({ _id: 'lunch' },
         { $set: { _id: 'lunch', subscribed: subscribed } },
+        { upsert: true }
+      )
+      col.updateOne({ _id: 'scheduled' },
+        { $set: { _id: 'scheduled', scheduled: scheduled } },
         { upsert: true }
       )
       client.close()
