@@ -176,7 +176,7 @@ module.exports = function (controller) {
       }
       client.close()
 
-      bot.reply(message, 'presence:' + present.map(user => '<@' + user + '>')
+      bot.reply(message, 'present:' + present.map(user => '<@' + user + '>')
         +'\n\n\nsubscribed:'+ subscribed.map(user => '<@' + user + '>')
         +'\n\n\nscheduled:'+ scheduled.map(user => '<@' + user + '>')
         +'\n\n\nlunchDuty: <@' + lunchDuty + '>')

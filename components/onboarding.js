@@ -23,6 +23,9 @@ module.exports = function(controller) {
               } else {
                 convo.say('I am a bot that has just joined your team');
                 convo.say('You must now /invite me to a channel so that I can be of use!');
+                convo.say('You can say "monitor presence" to me in a channel where you want to moniter user presence daily.');
+                convo.say('You can also say "add to lunch <user mentions>" to me I will add them to lunch duty.');
+                convo.say('when you will say "ask lunch" to me I will select one of person for the task');
               }
             });
         }
