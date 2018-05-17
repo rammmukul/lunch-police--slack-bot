@@ -146,21 +146,20 @@ module.exports = function (controller) {
       if (lunchDuty) {
         scheduled.push(lunchDuty)
       }
-      lunchDuty = asked
-      if (scheduled.includes(lunchDuty)) {
-        scheduled.splice(scheduled.indexOf(lunchDuty), 1)
+      if (scheduled.includes(asked)) {
+        scheduled.splice(scheduled.indexOf(asked), 1)
       }
       lunch.updateOne({ _id: 'scheduled' },
         { $set: { _id: 'scheduled', scheduled: scheduled } },
         { upsert: true }
       )
       presence.updateOne({ _id: today },
-        { $set: { _id: today, lunchDuty: lunchDuty } },
+        { $set: { _id: today, lunchDuty: asked } },
         { upsert: true }
       )
       client.close()
 
-      bot.reply(message, 'lunchDuty: <@' + lunchDuty + '>\n\n'
+      bot.reply(message, 'lunchDuty: <@' + asked + '>\n\n'
       + 'scheduled:'+ scheduled.map(user => '<@' + user + '>'))
     } catch (err) {
       console.log(err)
