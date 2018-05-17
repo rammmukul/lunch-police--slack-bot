@@ -64,9 +64,6 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db('test')
       let col = await db.collection('presence')
-      let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
-      if (message.channel !== monitor) return
-
       let presence = (await col.find({}).toArray()).filter(obj => obj._id !== 'group')
       client.close()
       let attendence = presence
