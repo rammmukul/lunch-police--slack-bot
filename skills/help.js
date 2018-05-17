@@ -2,7 +2,7 @@ module.exports = function (controller) {
 
   controller.hears('^\s*help', 'direct_mention', async function (bot, message) {
 
-    bot.reply(message, `"add" : subscribe yourself to lunch\n
+    bot.whisper(message, `"add" : subscribe yourself to lunch\n
 "remove" : unsubscribe yourself from lunch\n
 "add <user mentions>" : subscribe multiple users to lunch\n
 "remove <user mentions>" : unsubscribe multiple users from lunch\n
