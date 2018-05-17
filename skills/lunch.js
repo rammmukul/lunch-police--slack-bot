@@ -146,6 +146,8 @@ module.exports = function (controller) {
         timestamp: message.ts
       })
 
+      bot.whisper(message, 'can\'t find somone to do lunch duty "ask @user" to ask @user to do lunch duty')
+
       console.log(err)
     }
   })
