@@ -55,7 +55,7 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
-      bot.reply(message, 'I experienced an error saving configuration :' + err)
+      bot.replyInThread(message, 'I experienced an error saving configuration :' + err)
     }
   })
 
@@ -72,7 +72,7 @@ module.exports = function (controller) {
             .map(user => '<@' + user + '>'))
         .join('\n')
 
-      bot.reply(message, "presence:\n" + attendence)
+      bot.replyInThread(message, "presence:\n" + attendence)
     } catch (err) {
       console.log(err)
     }

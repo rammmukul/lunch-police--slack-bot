@@ -14,7 +14,7 @@ module.exports = function (controller) {
       bot.reply(message, 'lunch : '+subscribed.map(user => '<@' + user + '>').join(','))
       client.close()
     } catch (err) {
-      bot.reply(message, 'I experienced an error showing subscriptions :' + err)
+      bot.replyInThread(message, 'I experienced an error showing subscriptions :' + err)
     }
   })
 
@@ -47,7 +47,7 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
-      bot.reply(message, 'I experienced an error adding :' + err)
+      bot.replyInThread(message, 'I experienced an error adding :' + err)
     }
   })
 
@@ -80,7 +80,7 @@ module.exports = function (controller) {
       })
 
     } catch (err) {
-      bot.reply(message, 'I experienced an error removing :' + err)
+      bot.replyInThread(message, 'I experienced an error removing :' + err)
     }
   })
 
