@@ -1,6 +1,6 @@
 module.exports = function (controller) {
 
-  controller.hears('^\s*help', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*help', 'direct_message,direct_mention', async function (bot, message) {
 
     bot.whisper(message, `"add" : subscribe yourself to lunch\n
 "remove" : unsubscribe yourself from lunch\n

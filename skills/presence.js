@@ -72,7 +72,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*presence', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)

@@ -3,7 +3,7 @@ const url = process.env.MONGO_URI
 
 module.exports = function (controller) {
 
-  controller.hears('^\s*lunch', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*lunch', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -24,7 +24,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*add', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*add', 'direct_message,direct_mention', async function (bot, message) {
     let regx = /<@\w+>/g
     let add = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     add = add.length ? add : [message.user]
@@ -63,7 +63,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*remove', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*remove', 'direct_message,direct_mention', async function (bot, message) {
     let regx = /<@\w+>/g
     let remove = (message.text.match(regx) || []).map(user => user.slice(2, -1))
     remove = remove.length ? remove : [message.user]
@@ -111,7 +111,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*who', 'direct_mention', async function (bot, message) {
+  controller.hears('^\s*who', 'direct_message,direct_mention', async function (bot, message) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
 
