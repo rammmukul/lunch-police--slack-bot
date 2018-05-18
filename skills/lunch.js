@@ -173,12 +173,14 @@ module.exports = function (controller) {
       let presence = await db.collection('presence')
       let lunch = await db.collection('lunch')
 
+      let subscribed = (await lunch.find({ _id: 'lunch' }).toArray())[0]
       let scheduled = (await lunch.find({_id: 'scheduled'}).toArray())[0]
       let present = (await presence.find({_id: today}).toArray())[0]
+      subscribed = subscribed ? subscribed.subscribed : []
       scheduled = scheduled ? scheduled.scheduled : []
       let lunchDuty = present.lunchDuty
 
-      if (lunchDuty) {
+      if (lunchDuty && subscribed.includes(lunchDuty)) {
         scheduled.push(lunchDuty)
       }
       if (scheduled.includes(asked)) {
