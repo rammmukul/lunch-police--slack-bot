@@ -7,6 +7,8 @@ module.exports = function (controller) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
 
+    console.log('>>>>>>>>>>>>>>>>>>', today)
+
     let regex = /.*\n.*\n.*\n.*/g
     if (!message.text.match(regex)) {
       bot.whisper(message, "Looks like your report doesn't contains four things that you have done previous day, could you add more?")
