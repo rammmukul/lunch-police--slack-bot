@@ -9,17 +9,17 @@ module.exports = function (controller) {
 
     console.log('>>>>>>>>>>>>>>>>>>', today)
 
-    let regex = /.*\n.*\n.*\n.*/g
-    if (!message.text.match(regex)) {
-      bot.whisper(message, "Looks like your report doesn't contains four things that you have done previous day, could you add more?")
-    }
-
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
       let col = await db.collection('presence')
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
       if (message.channel !== monitor) return
+
+      let regex = /.*\n.*\n.*\n.*/g
+      if (!message.text.match(regex)) {
+        bot.whisper(message, "Looks like your report doesn't contains four things that you have done previous day, could you add more?")
+      }
 
       let presence = (await col.find({ _id: today }).toArray())[0]
       presence = presence ? presence.presence : []
