@@ -7,7 +7,7 @@ module.exports = function (controller) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
 
-    console.log('>>>>>>>>>>>>>>>>>>', today)
+    console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm'))
 
     try {
       let client = await MongoClient.connect(url)
