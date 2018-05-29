@@ -181,7 +181,8 @@ module.exports = function (controller) {
       let lunchDuty = present.lunchDuty
 
       if (lunchDuty && subscribed.includes(lunchDuty)) {
-        scheduled = scheduled.reverse().push(lunchDuty)
+        scheduled = scheduled.reverse()
+        scheduled.push(lunchDuty)
         scheduled = scheduled.reverse()
       }
       if (scheduled.includes(asked)) {
