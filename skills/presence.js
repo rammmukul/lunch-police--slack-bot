@@ -7,8 +7,6 @@ module.exports = function (controller) {
   controller.hears('.*', 'ambient', async function (bot, message) {
     let today = moment().startOf('day').format('DD MM YYYY')
 
-    console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm DD MM YYYY'))
-
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -80,7 +78,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*presence\sdetail', 'direct_message,direct_mention', async function (bot, message) {
+  controller.hears('^\s*presence detail', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
