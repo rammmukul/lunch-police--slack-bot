@@ -80,8 +80,7 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
+  controller.hears('^\s*presence\sdetail', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -93,8 +92,29 @@ module.exports = function (controller) {
           obj._id + ':\n' + obj.presence
             .map(user => '<@' + user + '>'))
         .join('\n')
+
+      bot.reply(message, "presence:\n" + attendence)
+    } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
+      console.log(err)
+    }
+  })
+
+  controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
+    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
+    try {
+      let register = await getAttendance(message.team, lastMonth)
         
-      console.log('<<<<<<<<<<<<<<<', await getAttendance(message.team, lastMonth))
+      console.log('<<<<<<<<<<<<<<<', register)
+      let attendence = 'total: ' + register.total + '\n'
+      attendence + Object.keys(register.report)
+        .map(user => '<@' + user + '>: ' + register.report[user])
+        .join('\n')
 
       bot.reply(message, "presence:\n" + attendence)
     } catch (err) {
@@ -138,8 +158,13 @@ async function populateAttendance(team, month) {
       register[user] = register[user] ? register[user] + 1 : 1
     )
   }
+  register = {
+    total: totalDays,
+    report: register
+  }
 
   console.log('register', JSON.stringify(register, null, 2))
 
   client.close()
+  return register
 }
