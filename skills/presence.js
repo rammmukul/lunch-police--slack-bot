@@ -18,7 +18,7 @@ module.exports = function (controller) {
 
       if (message.channel !== monitor) return
 
-      console.log('<<<<<<<<<<<<<<<', loadAttendance(lastMonth))
+      console.log('<<<<<<<<<<<<<<<', await loadAttendance(lastMonth))
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
