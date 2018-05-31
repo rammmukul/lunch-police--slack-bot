@@ -18,7 +18,7 @@ module.exports = function (controller) {
 
       if (message.channel !== monitor) return
 
-      console.log('<<<<<<<<<<<<<<<', await loadAttendance(db, lastMonth))
+      console.log('<<<<<<<<<<<<<<<', await getAttendance(message.team, lastMonth))
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
@@ -109,8 +109,28 @@ module.exports = function (controller) {
   })
 }
 
-async function loadAttendance(db, month) {
+async function getAttendance(team, month) {
+  let client = await MongoClient.connect(url)
+  const db = client.db(team)
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month }).toArray())[0]
+  client.close()
+  attended ? populateAttendance(team, month) : null
   return attended
+}
+
+async function populateAttendance(team, month) {
+  let client = await MongoClient.connect(url)
+  const db = client.db(team)
+  let attendance = await db.collection('attendance')
+  let presence = await db.collection('presence')
+
+  let day = moment(month).startOf('month').format('DD MM YYYY')
+  let nextMonth = moment(month).add(1, 'months')
+  for (;day.isBefore(nextMonth); day.add(1, 'days')) {
+    var present = (await presence.find({ _id: day}).toArray())
+    console.log(present)
+  }
+
+  client.close()
 }
