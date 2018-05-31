@@ -14,12 +14,11 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
       let col = await db.collection('presence')
-      let attendance = await db.collection('attendance')
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
 
       if (message.channel !== monitor) return
 
-      loadAttendance()
+      console.log('<<<<<<<<<<<<<<<', loadAttendance(lastMonth))
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
@@ -110,6 +109,8 @@ module.exports = function (controller) {
   })
 }
 
-function loadAttendance() {
-  console.log('hola hola')
+function loadAttendance(month) {
+  let attendance = await db.collection('attendance')
+  let attended = (await attendance.find({ _id: month }).toArray())[0]
+  return attended
 }
