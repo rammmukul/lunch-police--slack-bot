@@ -106,7 +106,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
+    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
     try {
       let register = await getAttendance(message.team, lastMonth)
 
