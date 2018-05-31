@@ -136,6 +136,7 @@ module.exports = function (controller) {
 
       let reply = ''
       for (register of attendance) {
+        console.log('register', register)
         reply += 'month: ' + register._id + '\n'
         reply += 'total: ' + register.total + '\n'
         reply += Object.keys(register.report)
