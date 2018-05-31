@@ -138,9 +138,9 @@ module.exports = function (controller) {
       for (register of attendance) {
         console.log('register', register)
         reply += 'month: ' + register._id + '\n'
-        reply += 'total: ' + register.total + '\n'
-        reply += Object.keys(register.report)
-          .map(user => '<@' + user + '>: ' + register.report[user])
+        reply += 'total: ' + register.attendance.total + '\n'
+        reply += Object.keys(register.attendance.report)
+          .map(user => '<@' + user + '>: ' + register.attendance.report[user])
           .join('\n')
         reply += '\n'
       }
