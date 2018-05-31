@@ -6,7 +6,6 @@ module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
     let today = moment().startOf('day').format('DD MM YYYY')
-    let lastMonth = moment().endOf('month').subtract(1, 'months').startOf('month')
 
     console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm DD MM YYYY'))
 
@@ -17,8 +16,6 @@ module.exports = function (controller) {
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
 
       if (message.channel !== monitor) return
-
-      console.log('<<<<<<<<<<<<<<<', await getAttendance(message.team, lastMonth))
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
@@ -84,6 +81,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
+    let lastMonth = moment().endOf('month').subtract(1, 'months').startOf('month')
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -95,6 +93,8 @@ module.exports = function (controller) {
           obj._id + ':\n' + obj.presence
             .map(user => '<@' + user + '>'))
         .join('\n')
+        
+      console.log('<<<<<<<<<<<<<<<', await getAttendance(message.team, lastMonth))
 
       bot.reply(message, "presence:\n" + attendence)
     } catch (err) {
@@ -138,8 +138,8 @@ async function populateAttendance(team, month) {
       register[user] = register[user] ? register[user] + 1 : 1
     )
   }
-  
-  console.log(JSON.stringify(register, null, 2))
+
+  console.log('register', JSON.stringify(register, null, 2))
 
   client.close()
 }
