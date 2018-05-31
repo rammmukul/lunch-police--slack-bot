@@ -129,7 +129,7 @@ module.exports = function (controller) {
 
   controller.hears('^\s*all record', 'direct_message,direct_mention', async function (bot, message) {
     let client = await MongoClient.connect(url)
-    const db = client.db(team)
+    const db = client.db(message.team)
     let attendance = await db.collection('attendance')
 
     let reply = ''
