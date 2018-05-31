@@ -116,7 +116,7 @@ module.exports = function (controller) {
         .map(user => '<@' + user + '>: ' + register.report[user])
         .join('\n')
 
-      bot.reply(message, "presence:\n" + attendence)
+      bot.reply(message, 'presence:' + lastMonth.format('MM YYYY') + '\n' + attendence)
     } catch (err) {
       bot.api.reactions.add({
         name: 'x',
