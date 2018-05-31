@@ -115,7 +115,7 @@ async function getAttendance(team, month) {
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month }).toArray())[0]
   client.close()
-  attended ? null : populateAttendance(team, month)
+  attended ? null : null //populateAttendance(team, month)
   return attended
 }
 
