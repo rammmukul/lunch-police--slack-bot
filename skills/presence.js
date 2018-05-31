@@ -1,11 +1,13 @@
 const MongoClient = require('mongodb').MongoClient
 const url = process.env.MONGO_URI
+const loadAttendance = require('./helpers/attendance.js')
 
 module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
     let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
+    let lastMonth = moment().endOf('month').subtract(1, 'months').format('MM YYYY')
 
     console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm DD MM YYYY'))
 
@@ -13,8 +15,12 @@ module.exports = function (controller) {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
       let col = await db.collection('presence')
+      let attendance = await db.collection('attendance')
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
+
       if (message.channel !== monitor) return
+
+      loadAttendance()
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
