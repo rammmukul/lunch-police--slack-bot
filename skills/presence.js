@@ -1,10 +1,10 @@
 const MongoClient = require('mongodb').MongoClient
+const moment = require('moment')
 const url = process.env.MONGO_URI
 
 module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
-    let moment = require('moment')
     let today = moment().startOf('day').format('DD MM YYYY')
     let lastMonth = moment().endOf('month').subtract(1, 'months').format('MM YYYY')
 
