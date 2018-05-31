@@ -128,22 +128,26 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*all record', 'direct_message,direct_mention', async function (bot, message) {
-    let client = await MongoClient.connect(url)
-    const db = client.db(message.team)
-    let attendance = await db.collection('attendance')
-    attendance = await attendance.find({}).toArray()
+    try {
+      let client = await MongoClient.connect(url)
+      const db = client.db(message.team)
+      let attendance = await db.collection('attendance')
+      attendance = await attendance.find({}).toArray()
 
-    let reply = ''
-    for (register of attendance) {
-      reply += 'month: ' + register._id + '\n'
-      reply += 'total: ' + register.total + '\n'
-      reply += Object.keys(register.report)
-        .map(user => '<@' + user + '>: ' + register.report[user])
-        .join('\n')
-      reply += '\n'
+      let reply = ''
+      for (register of attendance) {
+        reply += 'month: ' + register._id + '\n'
+        reply += 'total: ' + register.total + '\n'
+        reply += Object.keys(register.report)
+          .map(user => '<@' + user + '>: ' + register.report[user])
+          .join('\n')
+        reply += '\n'
+      }
+
+      bot.reply(message, reply)
+    } catch (e) {
+      console.log(e)
     }
-
-    bot.reply(message, reply)
   })
 }
 
