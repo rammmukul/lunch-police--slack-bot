@@ -115,7 +115,7 @@ async function getAttendance(team, month) {
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month }).toArray())[0]
   client.close()
-  attended ? populateAttendance(team, month) : null
+  attended ? null : populateAttendance(team, month)
   return attended
 }
 
@@ -129,7 +129,7 @@ async function populateAttendance(team, month) {
   let nextMonth = moment(month).add(1, 'months')
   for (;day.isBefore(nextMonth); day.add(1, 'days')) {
     var present = (await presence.find({ _id: day}).toArray())
-    console.log(present)
+    console.log('present', present)
   }
 
   client.close()
