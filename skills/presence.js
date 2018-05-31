@@ -112,7 +112,7 @@ module.exports = function (controller) {
         
       console.log('<<<<<<<<<<<<<<<', register)
       let attendence = 'total: ' + register.total + '\n'
-      attendence + Object.keys(register.report)
+      attendence += Object.keys(register.report)
         .map(user => '<@' + user + '>: ' + register.report[user])
         .join('\n')
 
