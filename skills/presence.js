@@ -109,7 +109,7 @@ module.exports = function (controller) {
   })
 }
 
-function loadAttendance(month) {
+async function loadAttendance(month) {
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month }).toArray())[0]
   return attended
