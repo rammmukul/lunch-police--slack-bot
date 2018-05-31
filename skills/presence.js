@@ -78,6 +78,29 @@ module.exports = function (controller) {
     }
   })
 
+  controller.hears('^\s*record\s*$', 'direct_message,direct_mention', async function (bot, message) {
+    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
+    try {
+      let register = await getAttendance(message.team, lastMonth)
+
+      let total = register.total
+      let attendence = 'total: ' + register.total + '\n'
+      attendence += Object.keys(register.report)
+        .map(user => '<@' + user + '>: Present:' + register.report[user] + ', Absent: ' + total - register.report[user])
+        .join('\n')
+
+      bot.reply(message, 'presence: ' + lastMonth.format('MM YYYY') + '\n' + attendence)
+    } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
+      console.log(err)
+    }
+  })
+
   controller.hears('^\s*record (--day|-d)', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
@@ -103,28 +126,6 @@ module.exports = function (controller) {
     }
   })
 
-  controller.hears('^\s*record\s*$', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
-    try {
-      let register = await getAttendance(message.team, lastMonth)
-
-      let attendence = 'total: ' + register.total + '\n'
-      attendence += Object.keys(register.report)
-        .map(user => '<@' + user + '>: ' + register.report[user])
-        .join('\n')
-
-      bot.reply(message, 'presence: ' + lastMonth.format('MM YYYY') + '\n' + attendence)
-    } catch (err) {
-      bot.api.reactions.add({
-        name: 'x',
-        channel: message.channel,
-        timestamp: message.ts
-      })
-
-      console.log(err)
-    }
-  })
-
   controller.hears('^\s*record (--month|-m)', 'direct_message,direct_mention', async function (bot, message) {
     try {
       let client = await MongoClient.connect(url)
@@ -133,12 +134,14 @@ module.exports = function (controller) {
       attendance = await attendance.find({}).toArray()
 
       let reply = ''
+      let total = 0
       for (register of attendance) {
         console.log('register', register)
+        total = register.attendance.total
         reply += 'month: ' + register._id + '\n'
         reply += 'total: ' + register.attendance.total + '\n'
         reply += Object.keys(register.attendance.report)
-          .map(user => '<@' + user + '>: ' + register.attendance.report[user])
+          .map(user => '<@' + user + '>: Present: ' + register.attendance.report[user] + ', Absent: ' + total - register.attendance.report[user])
           .join('\n')
         reply += '\n'
       }
