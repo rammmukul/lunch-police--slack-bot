@@ -110,6 +110,8 @@ module.exports = function (controller) {
 }
 
 async function loadAttendance(month) {
+  let client = await MongoClient.connect(url)
+  const db = client.db(message.team)
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month }).toArray())[0]
   return attended
