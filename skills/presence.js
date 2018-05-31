@@ -6,7 +6,7 @@ module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
     let today = moment().startOf('day').format('DD MM YYYY')
-    let lastMonth = moment().endOf('month').subtract(1, 'months').format('MM YYYY')
+    let lastMonth = moment().endOf('month').subtract(1, 'months')
 
     console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm DD MM YYYY'))
 
@@ -113,9 +113,9 @@ async function getAttendance(team, month) {
   let client = await MongoClient.connect(url)
   const db = client.db(team)
   let attendance = await db.collection('attendance')
-  let attended = (await attendance.find({ _id: month }).toArray())[0]
+  let attended = (await attendance.find({ _id: month.format('MM YYYY') }).toArray())[0]
   client.close()
-  attended ? null : null //populateAttendance(team, month)
+  attended ? null : populateAttendance(team, month)
   return attended
 }
 
@@ -125,10 +125,10 @@ async function populateAttendance(team, month) {
   let attendance = await db.collection('attendance')
   let presence = await db.collection('presence')
 
-  let day = moment(month).startOf('month').format('DD MM YYYY')
-  let nextMonth = moment(month).add(1, 'months')
+  let day = month.clone().startOf('month')
+  let nextMonth = month.clone().add(1, 'months')
   for (;day.isBefore(nextMonth); day.add(1, 'days')) {
-    var present = (await presence.find({ _id: day}).toArray())
+    var present = (await presence.find({ _id: day.format('DD MM YYYY')}).toArray())
     console.log('present', present)
   }
 
