@@ -129,7 +129,7 @@ async function populateAttendance(team, month) {
   let nextMonth = month.clone().add(1, 'months')
   for (;day.isBefore(nextMonth); day.add(1, 'days')) {
     var present = (await presence.find({ _id: day.format('DD MM YYYY')}).toArray())
-    console.log('present', present)
+    console.log('present' + day.format('DD MM YYYY'), present)
   }
 
   client.close()
