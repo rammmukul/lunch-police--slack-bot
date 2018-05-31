@@ -106,7 +106,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
+    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
     try {
       let register = await getAttendance(message.team, lastMonth)
 
@@ -125,6 +125,24 @@ module.exports = function (controller) {
 
       console.log(err)
     }
+  })
+
+  controller.hears('^\s*all record', 'direct_message,direct_mention', async function (bot, message) {
+    let client = await MongoClient.connect(url)
+    const db = client.db(team)
+    let attendance = await db.collection('attendance')
+
+    let reply = ''
+    for (register of attendance) {
+      reply += 'month: ' + register._id + '\n'
+      reply += 'total: ' + register.total + '\n'
+      reply += Object.keys(register.report)
+        .map(user => '<@' + user + '>: ' + register.report[user])
+        .join('\n')
+      reply += '\n'
+    }
+
+    bot.reply(message, reply)
   })
 }
 
