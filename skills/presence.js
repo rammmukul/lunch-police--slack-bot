@@ -106,17 +106,16 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
+    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
     try {
       let register = await getAttendance(message.team, lastMonth)
-        
-      console.log('<<<<<<<<<<<<<<<', register)
+
       let attendence = 'total: ' + register.total + '\n'
       attendence += Object.keys(register.report)
         .map(user => '<@' + user + '>: ' + register.report[user])
         .join('\n')
 
-      bot.reply(message, 'presence:' + lastMonth.format('MM YYYY') + '\n' + attendence)
+      bot.reply(message, 'presence: ' + lastMonth.format('MM YYYY') + '\n' + attendence)
     } catch (err) {
       bot.api.reactions.add({
         name: 'x',
@@ -135,7 +134,7 @@ async function getAttendance(team, month) {
   let attendance = await db.collection('attendance')
   let attended = (await attendance.find({ _id: month.format('MM YYYY') }).toArray())[0]
   client.close()
-  return attended ? null : populateAttendance(team, month)
+  return attended ? attended.attendance : populateAttendance(team, month)
 }
 
 async function populateAttendance(team, month) {
@@ -162,7 +161,14 @@ async function populateAttendance(team, month) {
     report: register
   }
 
-  console.log('register', JSON.stringify(register, null, 2))
+  try {
+    attendance.updateOne({ _id: month.format('MM YYYY') },
+      { $set: { _id: month.format('MM YYYY'), attendance: register } },
+      { upsert: true }
+    )
+  } catch (e) {
+    console.log(e)
+  }
 
   client.close()
   return register
