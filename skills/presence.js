@@ -1,6 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
 const url = process.env.MONGO_URI
-const loadAttendance = require('./helpers/attendance')
 
 module.exports = function (controller) {
 
@@ -109,4 +108,8 @@ module.exports = function (controller) {
       console.log(err)
     }
   })
+}
+
+function loadAttendance() {
+  console.log('hola hola')
 }
