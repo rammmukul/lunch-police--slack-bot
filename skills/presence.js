@@ -6,7 +6,7 @@ module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
     let today = moment().startOf('day').format('DD MM YYYY')
-    let lastMonth = moment().endOf('month').subtract(1, 'months')
+    let lastMonth = moment().endOf('month').subtract(1, 'months').startOf('month')
 
     console.log('>>>>>>>>>>>>>>>>>>', moment().format('HH:mm DD MM YYYY'))
 
@@ -126,7 +126,7 @@ async function populateAttendance(team, month) {
   let presence = await db.collection('presence')
 
   let day = month.clone().startOf('month')
-  let nextMonth = month.clone().add(1, 'months')
+  let nextMonth = month.clone().add(1, 'months').startOf('month')
   for (;day.isBefore(nextMonth); day.add(1, 'days')) {
     var present = (await presence.find({ _id: day.format('DD MM YYYY')}).toArray())
     console.log('present' + day.format('DD MM YYYY'), present)
