@@ -81,7 +81,7 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*presence', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().endOf('month').subtract(1, 'months').startOf('month')
+    let lastMonth = moment().startOf('month')//.endOf('month').subtract(1, 'months').startOf('month')
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
