@@ -86,7 +86,7 @@ module.exports = function (controller) {
       let total = Number(register.total)
       let attendence = 'total: ' + register.total + '\n'
       attendence += Object.keys(register.report)
-        .map(user => '<@' + user + '>:\n    Present:' + register.report[user] + ', Absent: ' + (total - register.report[user]))
+        .map(user => '<@' + user + '>:\n Present:' + register.report[user] + ', Absent: ' + (total - register.report[user]))
         .join('\n')
 
       bot.reply(message, 'presence: ' + lastMonth.format('MM YYYY') + '\n' + attendence)
@@ -141,14 +141,20 @@ module.exports = function (controller) {
         reply += 'month: ' + register._id + '\n'
         reply += 'total: ' + register.attendance.total + '\n'
         reply += Object.keys(register.attendance.report)
-          .map(user => '<@' + user + '>:\n    Present: ' + register.attendance.report[user] + ', Absent: ' + (total - register.attendance.report[user]))
+          .map(user => '<@' + user + '>:\n Present: ' + register.attendance.report[user] + ', Absent: ' + (total - register.attendance.report[user]))
           .join('\n')
         reply += '\n'
       }
 
       bot.reply(message, reply)
-    } catch (e) {
-      console.log(e)
+    } catch (err) {
+      bot.api.reactions.add({
+        name: 'x',
+        channel: message.channel,
+        timestamp: message.ts
+      })
+
+      console.log(err)
     }
   })
 }
