@@ -79,14 +79,14 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*record\s*$', 'direct_message,direct_mention', async function (bot, message) {
-    let lastMonth = moment().startOf('month').endOf('month').subtract(1, 'months').startOf('month')
+    let lastMonth = moment().subtract(1, 'months').startOf('month')
     try {
       let register = await getAttendance(message.team, lastMonth)
 
       let total = Number(register.total)
       let attendence = 'total: ' + register.total + '\n'
       attendence += Object.keys(register.report)
-        .map(user => '<@' + user + '>:\n Present:' + register.report[user] + ', Absent: ' + (total - register.report[user]))
+        .map(user => '<@' + user + '>:\n Present:*' + register.report[user] + '*, Absent: *' + (total - register.report[user]) + '*')
         .join('\n')
 
       bot.reply(message, 'presence: ' + lastMonth.format('MM YYYY') + '\n' + attendence)
