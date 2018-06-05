@@ -1,9 +1,11 @@
 const MongoClient = require('mongodb').MongoClient
 const url = process.env.MONGO_URI
+const serviced = []
 
 module.exports = function (controller) {
 
   controller.hears('^\s*lunch', 'direct_message,direct_mention', async function (bot, message) {
+    console.log(message)
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
