@@ -1,4 +1,7 @@
+const serviced = []
 module.exports = function (controller) {
+  if (serviced.includes(message.ts)) return
+  serviced.push(message.ts)
 
   controller.hears('^\s*help', 'direct_message,direct_mention', async function (bot, message) {
 

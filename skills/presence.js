@@ -1,10 +1,13 @@
 const MongoClient = require('mongodb').MongoClient
 const moment = require('moment')
 const url = process.env.MONGO_URI
+const serviced = []
 
 module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
+    if (serviced.includes(message.ts)) return
+    serviced.push(message.ts)
     let today = moment().startOf('day').format('DD MM YYYY')
 
     try {
@@ -49,6 +52,8 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*monitor', 'direct_mention', async function (bot, message) {
+    if (serviced.includes(message.ts)) return
+    serviced.push(message.ts)
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -79,6 +84,8 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*record\s*$', 'direct_message,direct_mention', async function (bot, message) {
+    if (serviced.includes(message.ts)) return
+    serviced.push(message.ts)
     let lastMonth = moment().subtract(1, 'months').startOf('month')
     try {
       let register = await getAttendance(message.team, lastMonth)
@@ -102,6 +109,8 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*record (--day|-d)', 'direct_message,direct_mention', async function (bot, message) {
+    if (serviced.includes(message.ts)) return
+    serviced.push(message.ts)
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
@@ -127,6 +136,8 @@ module.exports = function (controller) {
   })
 
   controller.hears('^\s*record (--month|-m)', 'direct_message,direct_mention', async function (bot, message) {
+    if (serviced.includes(message.ts)) return
+    serviced.push(message.ts)
     try {
       let client = await MongoClient.connect(url)
       const db = client.db(message.team)
