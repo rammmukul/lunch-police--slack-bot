@@ -6,6 +6,7 @@ const serviced = []
 module.exports = function (controller) {
 
   controller.hears('.*', 'ambient', async function (bot, message) {
+    console.log({message})
     if (serviced.includes(message.ts)) return
     serviced.push(message.ts)
     let today = moment().startOf('day').format('DD MM YYYY')
@@ -17,6 +18,10 @@ module.exports = function (controller) {
       let monitor = (await col.find({ _id: 'group' }).toArray())[0].monitor
 
       if (message.channel !== monitor) return
+
+      if (message.subtype === 'message_deleted') {
+        bot.whisper(message, "But why?")
+      }
 
       let regex = /.*\n.*\n.*\n.*/g
       if (!message.text.match(regex)) {
