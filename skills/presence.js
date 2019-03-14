@@ -5,7 +5,7 @@ const serviced = []
 
 module.exports = function (controller) {
 
-  controller.hears('.*', 'ambient', async function (bot, message) {
+  controller.hears('.*', 'ambient,message_deleted,message_changed,message_replied', async function (bot, message) {
     console.log(JSON.stringify({message}, null, 2))
     if (serviced.includes(message.ts)) return
     serviced.push(message.ts)
